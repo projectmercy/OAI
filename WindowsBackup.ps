@@ -1,0 +1,9 @@
+$removableDrive = "E:\Backup"
+$allDrives = Get-PhysicalDisk | Where-Object MediaType -eq "Fixed"
+
+foreach ($drive in $allDrives) {
+    $driveLetter = (Get-Partition -DiskNumber $drive.Number | Where-Object DriveLetter).DriveLetter
+    $source = "$driveLetter`:\"
+
+    Get-ChildItem $source -Recurse | Copy-Item -Destination "$removableDrive\$driveLetter" -Force
+}
